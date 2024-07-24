@@ -1,0 +1,18 @@
+---
+title: "Penguin Plots"
+author: "Emil"
+date: "2024-03-17"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+# Penguin Plots: Practice analysis
+
+## Setting up my environment
+Notes: setting up my R environment by loading the `tidyverse` and `palmerpenguins` packages:
+```{r}
+library(tidyverse)
+library(palmerpenguins)

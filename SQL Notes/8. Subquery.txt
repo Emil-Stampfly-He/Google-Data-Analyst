@@ -1,0 +1,75 @@
+# 寻找每个站台对应的平均旅行时长
+
+SELECT
+	subquery.start_station_id,
+	subquery.avg_duration
+FROM
+	(
+	SELECT
+		start_station_id,
+		AVG(tripduration) AS avg_duration
+	FROM
+		bigquery_public_data.new_york_citibike.citibike_trips
+	GROUP BY
+		start_station_id
+	) AS subquery
+ORDER BY
+	avg_duration DESC
+		
+
+# 比较每个站的旅行时间
+
+SELECT
+	starttime,
+	start_station_id,
+	tripduration,
+	(
+	SELECT
+		ROUND(AVG(tripduration), 2)
+	FROM
+		bigquery-public-data.new_york_citibike.citibike_trips
+	WHERE
+		start_station_id = outer_trips.start_station_id
+	) AS avg_duration_for_station,
+	ROUND(tripduration -
+		 (
+		SELECT 
+			AVG(tripduration)
+		FROM 
+			bigquery-public-data.new_york_citibike.citibike_trips
+		WHERE
+			start_station_id = outer_trips.start_station_id), 2
+		) AS difference_from_avg
+FROM
+	bigquery-public-data.new_york_citibike.citibike_trips
+ORDER BY
+	difference_from_avg DESC
+LIMIT
+	25
+
+
+# 决定5个拥有最长平均旅行时长的站台
+SELECT
+	tripduration,
+	start_station_id
+FROM
+	bigquery-public-data.new_york_citibike.citibike_trips
+WHERE
+	(
+	SELECT
+		start_station_id
+	FROM
+		(
+		SELECT
+			start_station_id,
+			AVG(tripduartion) AS avg_duration
+		FROM
+			bigquery-public-data.new_york_citibike.citibike_trips
+		GROUP BY
+			start_station_id
+		) AS top_five
+	ORDER BY
+		avg_duration DESC
+	LIMIT
+		5
+	)

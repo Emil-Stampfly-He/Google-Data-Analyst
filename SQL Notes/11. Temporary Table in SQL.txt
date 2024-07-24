@@ -1,0 +1,48 @@
+# 想要反复对一个庞大的数据的某一部分或及部分进行搜索
+# 使用：WITH
+
+# 生成一个temporary table：trips_over_one_hour
+WITH trips_over_one_hour AS 
+	(
+	SELECT *
+	FROM citibike_trips
+	WHERE tripduration >= 3600
+	)
+#对trips_over_one_hour进行搜索
+SELECT
+	COUNT(*) AS count
+FROM
+	 trips_over_one_hour
+
+
+# 示例2
+
+WITH longest_used_bike AS 
+	(
+	SELECT
+		bike_id,
+		SUM(duration_minutes) AS trip_duration
+	FROM
+		bikeshare_trips
+	GROUP BY
+		bike_id
+	ORDER BY
+		trip_duration DESC
+	LIMIT 1
+	)
+# 找到longest_used_bike经常离开的站台
+# 使用INNER JOIN
+SELECT
+	trips.start_station_id,
+	COUNT(*) AS trip_count,
+FROM
+	longest_used_bike
+INNER JOIN
+	bikeshare_trips AS trips
+	ON longest_used_bike.bike_id = trips.bike_id
+GROUP BY
+	trips.start_station_id
+ORDER BY
+	trip_count, DESC
+LIMIT
+	1

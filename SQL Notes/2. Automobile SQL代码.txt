@@ -1,0 +1,121 @@
+# 检查fuel_type是否只有两种
+# 正常情况应该只有两种，注意DISTINCT的使用
+SELECT
+	DISTINCT fuel_type
+FROM
+	`automobile_data`
+LIMIT
+	1000
+
+# 查看length的最大值和最小值
+# 使用MIN()和MAX()
+SELECT
+	MIN(length) AS min_length,
+	MAX(length) AS max_length
+FROM
+	`automobile_data`
+
+# 找出空缺的格子，使用IS NULL
+# 查看是否num_of_doors含有空格，注意IS NULL的使用
+SELECT
+	*
+FROM
+	`automobile_data`
+WHERE
+	num_of_doors IS NULL
+
+# 把空格子填满，使用UPDATE-SET
+UPDATE
+	`automobile_data`
+SET
+	num_of_doors = 'four'
+WHERE
+	make = 'dodge'
+	AND fuel_type = 'gas'
+	AND body_style = 'sedan';
+
+# 检查是否已经填满
+SELECT
+	*
+FROM
+	`automobile_data`
+WHERE
+	num_of_doors IS NULL
+
+# 检查潜在的错误，例如是否有拼写错误
+SELECT
+	DISTINCT num_of_cylinders
+FROM
+	`automobile_data`
+
+# 发现拼写错误，需要更正
+# 使用UPDATE-SET
+UPDATE
+	`automobile_data`
+SET
+	num_of_cylinders = 'two'
+WHERE
+	num_of_cylinders = 'tow';
+
+# 检查拼写错误是否已经更正过来了
+SELECT
+	DISTINCT num_of_cylinders
+FROM
+	`automobile_data`
+
+# 检查compression_ratio的范围
+# 使用MIN()和MAX()
+SELECT
+	MIN(compression_ratio) AS min_ratio,
+	MAX(compression_ratio) AS max_ratio
+FROM
+	`automobile_data`
+
+# 发现最大值超过范围
+# 先确保除了最大值的其他行都没有超过范围
+SELECT
+ 	MIN(compression_ratio) AS min_ratio,
+ 	MAX(compression_ratio) AS max_ratio
+FROM
+ 	`automobile_data`
+WHERE
+	compression_ratio <> 70;
+
+# 删除错误的行数
+# 但在之前先检查有多少行是错误的
+SELECT
+	COUNT(*) AS num_of_row_to_delete
+FROM
+	`automobile_data`
+WHERE
+	compression_ratio = 70;
+
+# 发现只有一行，所以可以直接删除
+DELETE 
+	`automobile_data`
+WHERE
+	compression_ratio = 70;
+
+# 确保数据的一致性
+# 检查数据长度是否一致，使用LENGTH()
+SELECT
+	DISTINCE drive_wheels
+	LENGTH(drive_wheels) AS string_length
+FROM
+	`automobile_data`
+
+# 发现有个别长度不一致，必然是结尾空格大致的
+# 使用TRIM()清除尾空格
+# 使用UPDATE-SET
+UPDATE
+	`automobile_data`
+SET
+	drive_wheels = TRIM(drive_wheels)
+WHERE
+	TRUE
+
+# 再次检查是否一致
+SELECT
+	DISTINCT drive_wheels
+FROM
+	`automobile_data`	

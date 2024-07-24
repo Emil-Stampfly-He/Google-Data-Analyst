@@ -1,0 +1,126 @@
+1. 基本操作：SELECT-FROM-WHERE, INSERT INTO-VALUES, UPDATE-SET
+# 选择
+SELECT
+	name, city
+FROM
+	`customer-table---sheet1`
+
+# 插入
+INSERT INTO `customer-table---sheet1`
+	(customer_id, name, address, city, state, zipcode, country)
+VALUES
+	(2645, 'Rachel DeSantos', '333 SQL Roal', 'Jackson', 'MI', 49202, 'US')
+
+# 更新
+UPDATE `customer-table---sheet1`
+SET address = '123 New Address'
+# 避免全部替换掉，需要指明替换哪一个的，用WHERE
+WHERE customer_id = 2645
+
+
+2. 清理数据：DISTINCT, LENGTH(), SUBSTR(), TRIM()
+# 清除重复的，用DISTINCT
+SELECT
+	DISTINCT customer_id
+FROM
+	`customer-table---sheet1`
+
+#检查数据长度是否一致
+SELECT
+	LENGTH(country）AS letters_in_country
+FROM
+	`customer-table---sheet1`
+
+#找到不一致长度的单元格
+SELECT
+	country
+FROM
+	`customer-table---sheet1`
+WHERE
+	LENGTH(country) > 2
+
+# 使用SUBSTR()来同时包括长度不一致的单元格
+# 大部分单元格长度为2，但有几个长度为3
+# 长度为2的为US， 长度为3的为USA
+SELECT
+	DISTINCT customer_id
+FROM
+	`customer-table---sheet1`
+WHERE
+	SUBSTR(country, 1, 2) = 'US'
+	# 1表示从第1个字符开始截取
+	# 2表示截取2个字符
+	# = 'US' 表示子字符串应该是什么
+
+#使用TRIM()来消除数据中的空格，从而保持一致
+#state应该都是长度为2的元素
+#需要检验有没有长度大于2的，进而更正它
+SELECT
+	state
+FROM
+	`customer-table---sheet1`
+WHERE
+	LENGTH(state) > 2
+
+SELECE
+	DISTINCT customer_id
+FROM
+	`customer-table---sheet1`
+WHERE
+	TRIM(state) = 'OH'
+	#哪一栏需要使用TRIM()
+	#只需要TRIM 'OH'，所以 = 'OH'
+	#最终得到所有住在Ohio的顾客ID，包括那些'OH'后面有空格的
+
+3. 数据类型的转换：CAST()
+# 检查floast是否被误录为str类型
+# 使用ORDER BY和DESC，降序排列
+SELECT
+	purchase_price
+FROM
+	`Lauren-s-Furniture-Store-Transaction-Table`
+ORDER BY
+	purchase_price DESC
+
+# 将str转换为float
+#使用FLOAT64
+SELECT
+	CAST(purchase_price AS FLOAT64)
+FROM
+	Lauren-s-Furniture-Store-Transaction-Table`
+ORDER BY
+	CAST(purchase_price AS FLOAT64) DESC
+
+# 将time转换为date
+SELECT
+	CAST(date AS date）AS date_only,
+	purchase_price
+FROM
+	`Lauren-s-Furniture-Store-Transaction-Table`
+WHERE
+	date BETWEEN '2020-12-01' AND '2020-12-31'
+
+4. 合并字符串生成新字符串：CONCAT()
+# 可以看出哪种颜色的沙发是最受欢迎的
+# 但是有时即使color不同，product_code也是相同的
+# 需要合并两者生成一个新的指标，使用CONCAT()
+SELECT
+	CONCAT(product_code, product_color) AS new_product_code
+FROM
+	`Lauren-s-Furniture-Store-Transaction-Table`
+WHERE
+	product = 'couch'
+
+5. 自动跳过NULL格：COALESCE()
+# 有一些product名字是NULL
+# 我们想用product_code来自动代替（跳过）
+SELECT
+	COALESCE(product, product_code) AS product_info
+FROM
+	`Lauren-s-Furniture-Store-Transaction-Table`
+
+
+
+
+
+

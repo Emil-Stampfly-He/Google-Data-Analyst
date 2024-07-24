@@ -1,0 +1,25 @@
+# GROUP BY/ORDER BY和SUM/COUNT
+# 把有相同的值的不同行整合为一个：GROUP BY
+# 常用语句：SELECT-FROM-WHERE-GROUP BY
+
+SELECT
+	EXTRACT(YEAR FROM starttime) AS year,
+	# EXTRACT用来取出部分数据
+	# 这里的数据按照时间来取，从starttime开始
+	COUNT(*) AS number_of_rides
+FROM
+	`citibike_trips`
+GROUP BY
+	year
+ORDER BY
+	year DESC
+	# 根据哪一列进行排序，这里是根据year进行排序
+	# 默认是升序，需要降序则加DESC
+
+
+
+
+
+
+
+

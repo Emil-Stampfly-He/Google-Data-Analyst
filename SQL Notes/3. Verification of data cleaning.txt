@@ -1,0 +1,14 @@
+#更正出现了很多次相同的笔误
+#使用CASE-WHEN-THEN-ELSE-END AS
+#WHEN-THEN可以多次叠加
+
+SELECT
+	Customer_id,
+	CASE
+	WHEN first_name = 'Tnoy' THEN 'Tony'
+	WHEN first_name = 'Tmo' THEN 'Tom
+	WHEN first_name = 'Emli' THEN 'Emil'
+	ELSE first_name
+	END AS cleaned_name
+FROM
+	project-id.customer_data.customer_name

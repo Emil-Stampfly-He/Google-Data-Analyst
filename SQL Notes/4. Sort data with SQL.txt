@@ -1,0 +1,31 @@
+# 使用ORDER BY排序
+# 加上DESC进行降序排列
+# 在WHERE后加上AND添加更多筛选条件
+
+SELECT
+	*
+FROM
+	movie_data
+WHERE
+	Genre = 'Comedy'
+	# 筛选出Genre仅为Comedy的
+	AND Revenue > 30000000
+	# 继续筛选出Revenue大于30000000的
+ORDER BY
+	Release_Date DESC
+	# ASC为升序
+
+
+# 使用LIMIT展示前多少行
+
+SELECT
+	*
+FROM
+	#Name of Database
+ORDER BY
+	Births ASC
+	# 对Births这一列进行升序排序
+LIMIT
+	10
+	# 前10行
+

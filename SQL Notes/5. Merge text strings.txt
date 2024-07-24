@@ -1,0 +1,29 @@
+# 组合字符串：CONCAT()
+
+SELECT
+	usertype,
+	CONCAT(start_station_name, ' to ', end_station_name) AS route,
+	COUNT(*) AS num_trips,
+	# 计算我们选择的所有数据的行数
+	ROUND(AVG(CAST(tripduration AS INT64)/60), 2) AS duration
+	# 粗略计算tripduration的平均数
+	# 60是把秒数转换为分钟
+	# 先用CAST把数据转换为INT
+	# 2代表保留两位小数
+FROM
+	*database-name*
+GROUP BY
+	# 由于使用了COUNT和AVG，需要用GROUP BY来组合使用过的数据的名称
+	start_station_name,
+	end_station_name,
+	user_type
+ORDER BY
+	num_trips DESC
+LIMIT
+	10
+	# 只想看前10的数据
+
+
+PS:：在SQL中，GROUP BY子句的作用是对结果集中的行进行分组。在这个查询中，GROUP BY子句根据指定的列（start_station_name，end_station_name，user_type）对数据进行分组。这样做的目的是计算每组数据的聚合值，例如COUNT(*)（行数）、AVG(tripduration)（平均行程持续时间）等。在这个查询中，它确保了对每个不同的组合（起始站点、终止站点和用户类型）计算相应的统计值，而不是对整个数据集进行统计。
+	
+	

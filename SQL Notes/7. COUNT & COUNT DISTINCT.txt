@@ -1,0 +1,15 @@
+# 寻找有order的warehouse
+# 使用INNER JOIN配对
+# 使用COUNT计算配对成功的行数
+# 使用GROUP BY显示具体的内容
+
+SELECT
+	state,
+	COUNT(DISTINCT warehouse.state) AS num_states
+FROM
+	`warehouse-orders---orders` AS orders
+INNER JOIN
+	`warehouse-orders---warehouse` AS warehouse
+	ON orders.warehouse_id = warehouse.warehouse_id 
+GROUP BY
+	warehouse.state
